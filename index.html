@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>여승호 · 게임 기획 포트폴리오</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+
+<style>
+  :root{
+    --ink:#090C16;
+    --ink-2:#0D1120;
+    --panel:#121829;
+    --panel-2:#171F33;
+    --line:rgba(232,184,96,.16);
+    --line-soft:rgba(231,233,242,.08);
+    --gold:#E8B860;
+    --gold-soft:#F4D79B;
+    --ember:#DD7A4E;
+    --cyan:#5FD3CE;
+    --text:#E8EAF3;
+    --muted:#9298B2;
+    --dim:#5C6party;
+    --dim:#5C6485;
+    --maxw:1080px;
+    --r:2px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);
+    color:var(--text);
+    font-family:"Pretendard Variable",Pretendard,-apple-system,system-ui,sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* ---- ambient background ---- */
+  .bg{position:fixed;inset:0;z-index:-2;pointer-events:none}
+  .bg::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(900px 600px at 78% -8%, rgba(232,184,96,.10), transparent 60%),
+      radial-gradient(700px 500px at 8% 18%, rgba(95,211,206,.07), transparent 55%),
+      linear-gradient(180deg,var(--ink),var(--ink-2));
+  }
+  .bg::after{
+    content:"";position:absolute;inset:0;opacity:.5;
+    background-image:
+      linear-gradient(rgba(231,233,242,.025) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(231,233,242,.025) 1px,transparent 1px);
+    background-size:46px 46px;
+    mask-image:radial-gradient(circle at 50% 30%,#000,transparent 78%);
+  }
+
+  /* ---- shared ---- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .mono{font-family:"JetBrains Mono",monospace}
+  .eyebrow{
+    font-family:"JetBrains Mono",monospace;
+    font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;
+    color:var(--gold);display:inline-flex;align-items:center;gap:12px;
+  }
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--gold);opacity:.7}
+
+  .section{padding:96px 0;position:relative}
+  .section + .section{border-top:1px solid var(--line-soft)}
+  .section-head{margin-bottom:48px}
+  .section-head h2{
+    font-family:"Black Han Sans",sans-serif;font-weight:400;
+    font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.05;margin-top:16px;
+    letter-spacing:-.01em;
+  }
+  .section-no{
+    font-family:"JetBrains Mono",monospace;color:var(--dim);
+    font-size:.74rem;letter-spacing:.2em;position:absolute;top:40px;right:28px;
+  }
+
+  /* bracket-framed panel — the recurring game-UI signature */
+  .panel{position:relative;background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--line);border-radius:var(--r);}
+  .panel::before,.panel::after{
+    content:"";position:absolute;width:14px;height:14px;border:2px solid var(--gold);
+  }
+  .panel::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+  .panel::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+
+  /* ===== HUD top bar ===== */
+  .hud{
+    position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);
+    background:rgba(9,12,22,.72);border-bottom:1px solid var(--line);
+  }
+  .hud-in{max-width:var(--maxw);margin:0 auto;padding:13px 28px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .hud-name{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.02em}
+  .hud-tag{font-family:"JetBrains Mono",monospace;font-size:.66rem;letter-spacing:.22em;
+    color:var(--dim);text-transform:uppercase}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);
+    box-shadow:0 0 0 0 rgba(95,211,206,.5);animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(95,211,206,.45)}70%{box-shadow:0 0 0 7px rgba(95,211,206,0)}100%{box-shadow:0 0 0 0 rgba(95,211,206,0)}}
+  .hud a{color:var(--muted);text-decoration:none;font-family:"JetBrains Mono",monospace;
+    font-size:.78rem;transition:color .2s}
+  .hud a:hover{color:var(--gold)}
+
+  /* ===== HERO ===== */
+  .hero{position:relative;padding:108px 0 92px}
+  .hero .eyebrow{margin-bottom:30px}
+  .hero h1{
+    font-family:"Black Han Sans",sans-serif;font-weight:400;
+    font-size:clamp(2.5rem,7.6vw,5.5rem);line-height:1.02;letter-spacing:-.02em;
+  }
+  .hero h1 .em{color:var(--gold)}
+  .hero .name-row{display:flex;align-items:flex-end;gap:22px;flex-wrap:wrap;margin-top:34px}
+  .hero .name{font-family:"Black Han Sans",sans-serif;font-size:clamp(2rem,5vw,3.4rem);line-height:1}
+  .hero .class{font-family:"JetBrains Mono",monospace;font-size:.8rem;letter-spacing:.24em;
+    color:var(--muted);text-transform:uppercase;padding-bottom:8px}
+  .hero .class b{color:var(--cyan);font-weight:500}
+  .hero .meta{margin-top:40px;display:flex;flex-wrap:wrap;gap:10px}
+  .chip{font-family:"JetBrains Mono",monospace;font-size:.74rem;letter-spacing:.08em;
+    color:var(--muted);border:1px solid var(--line);border-radius:999px;
+    padding:7px 15px;background:rgba(255,255,255,.015)}
+  .chip b{color:var(--gold-soft);font-weight:500}
+
+  .scrollcue{margin-top:62px;font-family:"JetBrains Mono",monospace;font-size:.7rem;
+    letter-spacing:.2em;color:var(--dim);display:flex;align-items:center;gap:10px}
+  .scrollcue .ln{width:34px;height:1px;background:var(--dim);animation:slide 2s infinite}
+  @keyframes slide{0%,100%{transform:scaleX(.4);opacity:.4}50%{transform:scaleX(1);opacity:1}}
+
+  /* ===== ABOUT ===== */
+  .about-grid{display:grid;grid-template-columns:1fr 280px;gap:54px;align-items:center}
+  .about-lead{font-size:clamp(1.05rem,2vw,1.35rem);line-height:1.8;color:var(--text)}
+  .about-lead .hl{color:var(--gold);font-weight:600}
+  .about-sub{margin-top:22px;color:var(--muted);font-size:1rem;line-height:1.85}
+
+  /* circular profile frame */
+  .avatar-box{display:flex;flex-direction:column;align-items:center;gap:18px}
+  .avatar{position:relative;width:230px;height:230px;border-radius:50%;
+    background:radial-gradient(circle at 50% 30%,var(--panel-2),var(--ink));
+    border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .avatar .ph{font-family:"JetBrains Mono",monospace;color:var(--dim);
+    font-size:.72rem;letter-spacing:.18em;text-align:center;line-height:1.9;padding:10px}
+  .avatar .ph span{display:block;color:var(--gold);font-size:1.5rem;margin-bottom:6px}
+  .avatar::before{content:"";position:absolute;inset:-2px;border-radius:50%;
+    background:conic-gradient(from 220deg,var(--gold),transparent 35%,var(--cyan) 60%,transparent 78%,var(--gold));
+    z-index:-1;filter:blur(.5px);opacity:.7}
+  .avatar-cap{font-family:"JetBrains Mono",monospace;font-size:.68rem;letter-spacing:.2em;
+    color:var(--dim);text-transform:uppercase}
+
+  /* ===== TIMELINE ===== */
+  .timeline{position:relative;padding-left:30px}
+  .timeline::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;
+    background:linear-gradient(var(--gold),var(--line-soft))}
+  .tl-item{position:relative;padding:0 0 38px}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-item::before{content:"";position:absolute;left:-29px;top:7px;width:11px;height:11px;
+    border-radius:50%;background:var(--ink);border:2px solid var(--gold)}
+  .tl-date{font-family:"JetBrains Mono",monospace;font-size:.78rem;letter-spacing:.06em;color:var(--cyan)}
+  .tl-title{font-size:1.22rem;font-weight:700;margin-top:6px}
+  .tl-desc{color:var(--muted);margin-top:4px;font-size:.95rem}
+
+  /* ===== CERTS ===== */
+  .cert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .cert{padding:26px 24px;position:relative}
+  .cert .k{font-family:"JetBrains Mono",monospace;font-size:.68rem;letter-spacing:.2em;
+    color:var(--dim);text-transform:uppercase}
+  .cert .v{font-size:1.18rem;font-weight:700;margin-top:12px}
+  .cert .badge{position:absolute;top:22px;right:22px;width:34px;height:34px;border-radius:50%;
+    border:1px solid var(--line);display:grid;place-items:center;color:var(--gold);font-size:.9rem}
+
+  /* ===== QUEST LOG ===== */
+  .quests{display:grid;gap:22px}
+  .quest{padding:34px 32px;position:relative}
+  .quest-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+  .quest-tag{font-family:"JetBrains Mono",monospace;font-size:.66rem;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink);background:var(--gold);padding:4px 11px;border-radius:2px;font-weight:700}
+  .quest-tag.alt{background:transparent;color:var(--cyan);border:1px solid var(--cyan)}
+  .quest h3{font-size:1.4rem;font-weight:700}
+  .quest p{color:var(--muted);font-size:1rem;line-height:1.85}
+  .quest .role{font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.12em;
+    color:var(--gold-soft)}
+
+  /* ===== STATS ===== */
+  .stat-group{margin-bottom:40px}
+  .stat-group:last-child{margin-bottom:0}
+  .stat-cat{font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--cyan);margin-bottom:20px;
+    display:flex;align-items:center;gap:12px}
+  .stat-cat::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+  .stat{margin-bottom:18px}
+  .stat-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .stat-name{font-weight:600;font-size:1rem}
+  .stat-val{font-family:"JetBrains Mono",monospace;font-size:.92rem;color:var(--gold)}
+  .stat-val .max{color:var(--dim);font-size:.74rem}
+  .bar{height:9px;background:rgba(255,255,255,.05);border-radius:999px;overflow:hidden;position:relative}
+  .bar::before{content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(90deg,transparent 0,transparent 8px,rgba(0,0,0,.25) 8px,rgba(0,0,0,.25) 9px);opacity:.4;z-index:2}
+  .fill{height:100%;width:0;border-radius:999px;
+    background:linear-gradient(90deg,var(--ember),var(--gold) 55%,var(--gold-soft));
+    transition:width 1.3s cubic-bezier(.22,1,.36,1)}
+
+  /* ===== FOOTER ===== */
+  .foot{padding:70px 0 80px;border-top:1px solid var(--line)}
+  .foot-in{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
+  .foot h3{font-family:"Black Han Sans",sans-serif;font-weight:400;font-size:clamp(1.6rem,4vw,2.4rem)}
+  .foot a{color:var(--gold);text-decoration:none;font-family:"JetBrains Mono",monospace;
+    font-size:1.05rem;border-bottom:1px solid var(--line);padding-bottom:3px;transition:.2s}
+  .foot a:hover{color:var(--gold-soft);border-color:var(--gold)}
+  .foot .sm{font-family:"JetBrains Mono",monospace;font-size:.72rem;color:var(--dim);letter-spacing:.1em}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* responsive */
+  @media(max-width:780px){
+    .about-grid{grid-template-columns:1fr;gap:40px}
+    .avatar-box{order:-1}
+    .cert-grid{grid-template-columns:1fr}
+    .section{padding:74px 0}
+    .section-no{display:none}
+    .hud-tag{display:none}
+    .foot-in{flex-direction:column;align-items:flex-start}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+    .fill{transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+
+<!-- ============ HUD ============ -->
+<header class="hud">
+  <div class="hud-in">
+    <div class="hud-name"><span class="dot"></span>여승호 <span class="hud-tag">Planner & Developer</span></div>
+    <a href="mailto:ysh070817@naver.com">ysh070817@naver.com</a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero wrap reveal">
+  <div class="eyebrow">Player Profile · 게임 기획 & 개발</div>
+  <h1>새로운 변화를<br>두려워하지 않고<br><span class="em">직접 만듭니다</span>.</h1>
+  <div class="name-row">
+    <div class="name">여승호</div>
+    <div class="class">CLASS · <b>GAME&nbsp;PLANNER&nbsp;&&nbsp;DEVELOPER</b></div>
+  </div>
+  <div class="meta">
+    <span class="chip">전공 · <b>게임콘텐츠</b></span>
+    <span class="chip">소속 · <b>유한대학교</b></span>
+    <span class="chip">출시작 · <b>역린 (STOVE Indie)</b></span>
+  </div>
+  <div class="scrollcue"><span class="ln"></span>SCROLL TO EXPLORE</div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="section" id="about">
+  <span class="section-no">01 / OVERVIEW</span>
+  <div class="wrap reveal">
+    <div class="section-head"><div class="eyebrow">개요</div></div>
+    <div class="about-grid">
+      <div>
+        <p class="about-lead">
+          게임을 <span class="hl">기획</span>하는 데서 멈추지 않고,
+          <span class="hl">직접 코드로 만들어</span> 출시까지 끌고 가는 개발자입니다.
+        </p>
+        <p class="about-sub">
+          '재미있겠다'를 넘어 '구현이 가능한가'를 먼저 따지는 습관 덕분에,
+          기획 의도를 가장 잘 아는 사람이 직접 구현한다는 강점을 가졌습니다.
+          새로운 엔진과 도구 앞에서 망설이기보다, 직접 만들어 보며 익히는 과정을 즐깁니다.
+        </p>
+      </div>
+      <div class="avatar-box">
+        <!-- 증명사진을 넣으려면 아래 <div class="ph">...</div> 를 지우고
+             <img src="사진파일.jpg" alt="여승호"> 를 넣어주세요. -->
+        <div class="avatar">
+          <div class="ph"><span>◍</span>증명사진<br>PHOTO</div>
+          <!-- <img src="photo.jpg" alt="여승호 증명사진"> -->
+        </div>
+        <div class="avatar-cap">YEO&nbsp;SEUNGHO</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section class="section" id="career">
+  <span class="section-no">02 / LOG</span>
+  <div class="wrap reveal">
+    <div class="section-head"><div class="eyebrow">학력 및 경력</div><h2>걸어온 길</h2></div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">2020.03 — 2027.02</div>
+        <div class="tl-title">유한대학교 컴퓨터공학과</div>
+        <div class="tl-desc">게임콘텐츠전공</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2017.03 — 2020.02</div>
+        <div class="tl-title">남인천고등학교</div>
+        <div class="tl-desc">졸업</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CERTS ============ -->
+<section class="section" id="certs">
+  <span class="section-no">03 / BADGES</span>
+  <div class="wrap reveal">
+    <div class="section-head"><div class="eyebrow">자격증</div><h2>보유 자격</h2></div>
+    <div class="cert-grid">
+      <div class="panel cert"><div class="badge">✦</div><div class="k">ITQ</div><div class="v">아래한글</div></div>
+      <div class="panel cert"><div class="badge">✦</div><div class="k">ITQ</div><div class="v">파워포인트</div></div>
+      <div class="panel cert"><div class="badge">✦</div><div class="k">GTQ</div><div class="v">2급</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ QUEST LOG ============ -->
+<section class="section" id="quests">
+  <span class="section-no">04 / QUESTS</span>
+  <div class="wrap reveal">
+    <div class="section-head"><div class="eyebrow">교육 · 활동 · 수상</div><h2>프로젝트 기록</h2></div>
+    <div class="quests">
+      <div class="panel quest">
+        <div class="quest-top">
+          <span class="quest-tag">Team Project</span>
+          <h3>BEASTRIUM (비스트림)</h3>
+          <span class="role">· 기획 + 개발 (4인 팀)</span>
+        </div>
+        <p>
+          4인 팀 프로젝트에서 기획·개발 역할을 맡아 게임 'BEASTRIUM(비스트림)'을 제작했습니다.
+          처음 기획을 담당하다 보니 많이 헤맸고, 구현이 어려운 것을 요청한 적도 있었습니다.
+          하지만 계속 수정해 나가면서 <strong style="color:var(--gold-soft)">'어떻게 재미있을까'를 넘어 '구현이 가능한가'</strong>를
+          가장 먼저 생각하게 되었고, 구체적인 규칙과 데이터가 왜 필요한지 몸소 체감했습니다.
+        </p>
+      </div>
+      <div class="panel quest">
+        <div class="quest-top">
+          <span class="quest-tag alt">Solo · Launched</span>
+          <h3>역린 (Horizontal Scroll)</h3>
+          <span class="role">· 기획 + 개발 · STOVE Indie 직접 출시</span>
+        </div>
+        <p>
+          학교생활 중 남는 시간을 활용해 AI와 함께 '역린'이라는 횡스크롤 게임을 제작하여
+          <strong style="color:var(--cyan)">스토브인디(STOVE Indie)에 직접 런칭</strong>했습니다.
+          이 과정에서 유니티에 대한 이해가 한층 깊어졌고, 앞선 팀 프로젝트에서 기획을 경험했던 것이
+          가장 큰 도움이 되었습니다.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<section class="section" id="stats">
+  <span class="section-no">05 / STATS</span>
+  <div class="wrap reveal">
+    <div class="section-head"><div class="eyebrow">기술</div><h2>스킬 스탯</h2></div>
+
+    <div class="stat-group">
+      <div class="stat-cat">Game Engine</div>
+      <div class="stat"><div class="stat-row"><span class="stat-name">언리얼 엔진</span><span class="stat-val">80<span class="max">/100</span></span></div><div class="bar"><div class="fill" data-v="80"></div></div></div>
+      <div class="stat"><div class="stat-row"><span class="stat-name">유니티 엔진</span><span class="stat-val">60<span class="max">/100</span></span></div><div class="bar"><div class="fill" data-v="60"></div></div></div>
+    </div>
+
+    <div class="stat-group">
+      <div class="stat-cat">Programming</div>
+      <div class="stat"><div class="stat-row"><span class="stat-name">C</span><span class="stat-val">70<span class="max">/100</span></span></div><div class="bar"><div class="fill" data-v="70"></div></div></div>
+      <div class="stat"><div class="stat-row"><span class="stat-name">C++</span><span class="stat-val">70<span class="max">/100</span></span></div><div class="bar"><div class="fill" data-v="70"></div></div></div>
+    </div>
+
+    <div class="stat-group">
+      <div class="stat-cat">Web</div>
+      <div class="stat"><div class="stat-row"><span class="stat-name">HTML5</span><span class="stat-val">85<span class="max">/100</span></span></div><div class="bar"><div class="fill" data-v="85"></div></div></div>
+      <div class="stat"><div class="stat-row"><span class="stat-name">CSS</span><span class="stat-val">80<span class="max">/100</span></span></div><div class="bar"><div class="fill" data-v="80"></div></div></div>
+      <div class="stat"><div class="stat-row"><span class="stat-name">JavaScript</span><span class="stat-val">80<span class="max">/100</span></span></div><div class="bar"><div class="fill" data-v="80"></div></div></div>
+    </div>
+
+    <div class="stat-group">
+      <div class="stat-cat">Tools</div>
+      <div class="stat"><div class="stat-row"><span class="stat-name">아래한글</span><span class="stat-val">90<span class="max">/100</span></span></div><div class="bar"><div class="fill" data-v="90"></div></div></div>
+      <div class="stat"><div class="stat-row"><span class="stat-name">파워포인트</span><span class="stat-val">90<span class="max">/100</span></span></div><div class="bar"><div class="fill" data-v="90"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot">
+  <div class="wrap foot-in reveal">
+    <div>
+      <h3>함께 만들고 싶습니다.</h3>
+      <p class="sm" style="margin-top:14px">YEO SEUNGHO · GAME PLANNER & DEVELOPER</p>
+    </div>
+    <a href="mailto:ysh070817@naver.com">ysh070817@naver.com →</a>
+  </div>
+</footer>
+
+<script>
+  // reveal on scroll
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        // fill stat bars inside
+        e.target.querySelectorAll('.fill').forEach(f=>{
+          f.style.width = (f.dataset.v||0) + '%';
+        });
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:.18});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
